@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechCorp Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f5f7fa;
+            --text-color: #34495e;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-container, .login-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2, h3, h4 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: none;
+            font-weight: 500;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            background-color: #fff;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: #fff;
+            font-weight: 500;
+        }
+
+        tr {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .empnames {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .empnames:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 20px;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: calc(100% - 24px);
+            padding-left: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
+            background-repeat: no-repeat;
+            background-position: 10px center;
+        }
+
+        .search-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            max-width: 80%;
+            width: 400px;
+        }
+
+        .task-table {
+            margin-top: 20px;
+        }
+
+        .completed-task {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        #todo-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .complete-task-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .complete-task-btn:hover {
+            background-color: #27ae60;
+        }
+
+        /* New styles for interactive features */
+        .task-priority {
+            font-weight: bold;
+        }
+
+        .priority-high {
+            color: #e74c3c;
+        }
+
+        .priority-medium {
+            color: #f39c12;
+        }
+
+        .priority-low {
+            color: #3498db;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #notification-center {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background-color: #fff;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container, .login-container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            table, th, td {
+                font-size: 14px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .dashboard-container, .login-container {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .empnames, li, tr {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <h2 style="text-align: center">TechCorp Login</h2>
+        <form id="login-form">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="error-message" class="error"></p>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="hidden">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <img src="logocomp.jpg" alt="TechCorp Logo">
+                <span>TechCorp Admin Dashboard</span>
+            </div>
+            <button id="logout-admin">Logout</button>
+        </nav>
+        <div class="dashboard-container">
+            <h2>Admin Dashboard</h2>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" id="admin-search" placeholder="Search tasks, employees, or teams...">
+            </div>
+
+            <!-- Add Task Section -->
+            <div id="task-manager">
+                <h3>Add Task</h3>
+                <input type="text" id="new-task" placeholder="Task Name">
+                <select id="assign-to">
+                    <option value="Sujal">Sujal Tiwari (Technical)</option>
+                    <option value="Anubhav">Anubhav Jain (Technical)</option>
+                    <option value="Siya">Siya Mathur (Marketing)</option>
+                    <option value="Hriday">Hriday Kumar (Marketing)</option>
+                    <option value="Pihu">Pihu Ranawat (HR)</option>
+                    <option value="Aadil">Aadil Khanna (HR)</option>
+                </select>
+                <input type="date" id="task-deadline">
+                <select id="task-priority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+                <button id="add-task">Add Task</button>
+            </div>
+
+            <!-- Teams Info -->
+            <h3>Teams Overview</h3>
+
+            <!-- Technical Team Table -->
+            <div class="team-table">
+                <h4>Technical Team</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Total Tasks</th>
+                            <th>Deadline</th>
+                            <th>Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody id="technical-team">
+                        <!-- Team members will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Marketing Team Table -->
+            <div class="team-table">
+                <h4>Marketing Team</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Total Tasks</th>
+                            <th>Deadline</th>
+                            <th>Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody id="marketing-team">
+                        <!-- Team members will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- HR Team Table -->
+            <div class="team-table">
+                <h4>HR Team</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Total Tasks</th>
+                            <th>Deadline</th>
+                            <th>Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hr-team">
+                        <!-- Team members will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Task Assignment Table -->
+            <div class="task-table">
+                <h3>Task Assignments</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Assigned To</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Deadline</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="task-assignments">
+                        <!-- Task assignments will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Search Card -->
+        <div id="search-card" class="search-card">
+            <h3>Search Results</h3>
+            <p id="search-results"></p>
+            <button id="close-search">Close</button>
+        </div>
+    </div>
+
+    <!-- Employee Dashboard -->
+    <div id="employee-dashboard" class="hidden">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <img src="logocomp.jpg" alt="TechCorp Logo">
+                <span>TechCorp Employee Dashboard</span>
+            </div>
+            <button id="logout-employee">Logout</button>
+        </nav>
+        <div class="dashboard-container">
+            <h2>Employee Dashboard</h2>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" id="employee-search" placeholder="Search tasks or to-dos...">
+            </div>
+
+            <!-- Employee Info -->
+            <div id="employee-info">
+                <!-- Employee info will be dynamically added here -->
+            </div>
+
+            <h3>To-Do List</h3>
+            <select id="employee-selector">
+                <option value="Sujal">Sujal Tiwari (Technical)</option>
+                <option value="Anubhav">Anubhav Jain (Technical)</option>
+                <option value="Siya">Siya Mathur (Marketing)</option>
+                <option value="Hriday">Hriday Kumar (Marketing)</option>
+                <option value="Pihu">Pihu Ranawat (HR)</option>
+                <option value="Aadil">Aadil Khanna (HR)</option>
+            </select>
+            <input type="text" id="new-todo" placeholder="New To-Do">
+            <button id="add-todo">Add To-Do</button>
+            <ul id="todo-list"></ul>
+        </div>
+    </div>
+
+    <!-- Task Details Modal -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Task Details</h2>
+            <div id="task-details"></div>
+        </div>
+    </div>
+
+    <!-- Notification Center -->
+    <div id="notification-center"></div>
+
+    <script>
+        const users = {
+            admin: { username: "admin", password: "admin123", role: "admin" },
+            employee: { username: "employee", password: "employee123", role: "employee" }
+        };
+
+        const employees = [
+            { name: "Sujal Tiwari", team: "Technical", position: "Coder", totalTasks: 5, completedTasks: 3, pendingTasks: 2, deadline: "2024-09-20", progress: 60 },
+            { name: "Anubhav Jain", team: "Technical", position: "Developer", totalTasks: 4, completedTasks: 3, pendingTasks: 1, deadline: "2024-09-25", progress: 75 },
+            { name: "Siya Mathur", team: "Marketing", position: "Manager", totalTasks: 6, completedTasks: 4, pendingTasks: 2, deadline: "2024-09-18", progress: 80 },
+            { name: "Hriday Kumar", team: "Marketing", position: "Analyst", totalTasks: 3, completedTasks: 1, pendingTasks: 2, deadline: "2024-09-22", progress: 33 },
+            { name: "Pihu Ranawat", team: "HR", position: "HR Executive", totalTasks: 5, completedTasks: 4, pendingTasks: 1, deadline: "2024-09-19", progress: 80 },
+            { name: "Aadil Khanna", team: "HR", position: "HR Manager", totalTasks: 4, completedTasks: 2, pendingTasks: 2, deadline: "2024-09-24", progress: 50 }
+        ];
+
+        const tasks = [
+            { name: "Complete project report", assignedTo: "Sujal Tiwari", status: "In Progress", priority: "high", deadline: "2024-09-15" },
+            { name: "Review code changes", assignedTo: "Anubhav Jain", status: "Completed", priority: "medium", deadline: "2024-09-10" },
+            { name: "Prepare marketing strategy", assignedTo: "Siya Mathur", status: "In Progress", priority: "high", deadline: "2024-09-20" },
+            { name: "Analyze market trends", assignedTo: "Hriday Kumar", status: "In Progress", priority: "medium", deadline: "2024-09-18" },
+            { name: "Conduct employee survey", assignedTo: "Pihu Ranawat", status: "Completed", priority: "low", deadline: "2024-09-12" },
+            { name: "Update HR policies", assignedTo: "Aadil Khanna", status: "In Progress", priority: "medium", deadline: "2024-09-25" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTeamTables();
+            populateTaskAssignments();
+            populateEmployeeInfo();
+        });
+
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const user = Object.values(users).find(u => u.username === username && u.password === password);
+
+            if (user) {
+                document.getElementById('login-page').classList.add('hidden');
+                if (user.role === "admin") {
+                    document.getElementById('admin-dashboard').classList.remove('hidden');
+                } else {
+                    document.getElementById('employee-dashboard').classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('error-message').textContent = "Invalid username or password";
+            }
+        });
+
+        document.getElementById('logout-admin').addEventListener('click', function() {
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('login-page').classList.remove('hidden');
+        });
+
+        document.getElementById('logout-employee').addEventListener('click', function() {
+            document.getElementById('employee-dashboard').classList.add('hidden');
+            document.getElementById('login-page').classList.remove('hidden');
+        });
+
+        function populateTeamTables() {
+            const teams = ['technical', 'marketing', 'hr'];
+            teams.forEach(team => {
+                const tableBody = document.getElementById(`${team}-team`);
+                employees.filter(emp => emp.team.toLowerCase() === team).forEach(emp => {
+                    const row = tableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${emp.name}</td>
+                        <td>${emp.position}</td>
+                        <td>${emp.totalTasks}</td>
+                        <td>${emp.deadline}</td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: ${emp.progress}%;">${emp.progress}%</div>
+                            </div>
+                        </td>
+                    `;
+                });
+            });
+        }
+
+        function populateTaskAssignments() {
+            const tableBody = document.getElementById('task-assignments');
+            tasks.forEach((task, index) => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${task.name}</td>
+                    <td>${task.assignedTo}</td>
+                    <td>${task.status}</td>
+                    <td><span class="task-priority priority-${task.priority}">${task.priority}</span></td>
+                    <td>${task.deadline}</td>
+                    <td>
+                        <button onclick="showTaskDetails(${index})">Details</button>
+                        <button onclick="updateTaskStatus(${index})">Update Status</button>
+                    </td>
+                `;
+            });
+        }
+
+        function populateEmployeeInfo() {
+            const employeeInfo = document.getElementById('employee-info');
+            employees.forEach(emp => {
+                const div = document.createElement('div');
+                div.className = 'empnames';
+                div.innerHTML = `
+                    <p>Name: ${emp.name}</p>
+                    <p>Team: ${emp.team} Team</p>
+                    <p>Position: ${emp.position}</p>
+                    <p>Total Tasks: ${emp.totalTasks}</p>
+                    <p>Completed Tasks: ${emp.completedTasks}</p>
+                    <p>Pending Tasks: ${emp.pendingTasks}</p>
+                    <p>Deadline: ${emp.deadline}</p>
+                    <p>Progress: ${emp.progress}%</p>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: ${emp.progress}%;">${emp.progress}%</div>
+                    </div>
+                `;
+                employeeInfo.appendChild(div);
+                if (emp !== employees[employees.length - 1]) {
+                    employeeInfo.appendChild(document.createElement('hr'));
+                }
+            });
+        }
+
+        document.getElementById('add-task').addEventListener('click', function() {
+            const taskName = document.getElementById('new-task').value;
+            const assignedTo = document.getElementById('assign-to').value;
+            const deadline = document.getElementById('task-deadline').value;
+            const priority = document.getElementById('task-priority').value;
+
+            if (taskName && assignedTo && deadline && priority) {
+                const employee = employees.find(emp => emp.name.split(' ')[0] === assignedTo);
+                if (employee) {
+                    employee.totalTasks++;
+                    employee.pendingTasks++;
+                    employee.progress = Math.round((employee.completedTasks / employee.totalTasks) * 100);
+
+                    // Update employee table
+                    const employeeRow = document.querySelector(`tr:contains('${employee.name}')`);
+                    if (employeeRow) {
+                        employeeRow.cells[2].textContent = employee.totalTasks;
+                        const progressBar = employeeRow.querySelector('.progress');
+                        progressBar.style.width = `${employee.progress}%`;
+                        progressBar.textContent = `${employee.progress}%`;
+                    }
+
+                    // Add task to assignments
+                    const taskAssignments = document.getElementById('task-assignments');
+                    const newRow = taskAssignments.insertRow();
+                    const taskIndex = tasks.length;
+                    newRow.innerHTML = `
+                        <td>${taskName}</td>
+                        <td>${employee.name}</td>
+                        <td>In Progress</td>
+                        <td><span class="task-priority priority-${priority}">${priority}</span></td>
+                        <td>${deadline}</td>
+                        <td>
+                            <button onclick="showTaskDetails(${taskIndex})">Details</button>
+                            <button onclick="updateTaskStatus(${taskIndex})">Update Status</button>
+                        </td>
+                    `;
+
+                    // Add task to tasks array
+                    tasks.push({
+                        name: taskName,
+                        assignedTo: employee.name,
+                        status: "In Progress",
+                        priority: priority,
+                        deadline: deadline
+                    });
+
+                    document.getElementById('new-task').value = "";
+                    document.getElementById('task-deadline').value = "";
+                    document.getElementById('task-priority').value = "low";
+
+                    showNotification(`New task "${taskName}" assigned to ${employee.name}`);
+                    updateEmployeeInfo(employee);
+                }
+            }
+        });
+
+        function showTaskDetails(index) {
+            const task = tasks[index];
+            const modal = document.getElementById('task-modal');
+            const detailsDiv = document.getElementById('task-details');
+            detailsDiv.innerHTML = `
+                <p><strong>Task:</strong> ${task.name}</p>
+                <p><strong>Assigned To:</strong> ${task.assignedTo}</p>
+                <p><strong>Status:</strong> ${task.status}</p>
+                <p><strong>Priority:</strong> <span class="task-priority priority-${task.priority}">${task.priority}</span></p>
+                <p><strong>Deadline:</strong> ${task.deadline}</p>
+            `;
+            modal.style.display = "block";
+        }
+
+        function updateTaskStatus(index) {
+            const task = tasks[index];
+            const newStatus = task.status === "In Progress" ? "Completed" : "In Progress";
+            task.status = newStatus;
+            const taskRow = document.getElementById('task-assignments').rows[index];
+            taskRow.cells[2].textContent = newStatus;
+            
+            const employee = employees.find(emp => emp.name === task.assignedTo);
+            if (employee) {
+                if (newStatus === "Completed") {
+                    employee.completedTasks++;
+                    employee.pendingTasks--;
+                } else {
+                    employee.completedTasks--;
+                    employee.pendingTasks++;
+                }
+                employee.progress = Math.round((employee.completedTasks / employee.totalTasks) * 100);
+                updateEmployeeInfo(employee);
+            }
+
+            showNotification(`Task "${task.name}" status updated to ${newStatus}`);
+        }
+
+        function showNotification(message) {
+            const notificationCenter = document.getElementById('notification-center');
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notificationCenter.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notificationCenter.removeChild(notification);
+                }, 300);
+            }, 5000);
+        }
+
+        document.getElementById('add-todo').addEventListener('click', function() {
+            const employee = document.getElementById('employee-selector').value;
+            const newTodo = document.getElementById('new-todo').value;
+
+            if (newTodo && employee) {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${newTodo} (for ${employee})</span>
+                    <button class="complete-task-btn">Complete</button>
+                `;
+                document.getElementById('todo-list').appendChild(li);
+                document.getElementById('new-todo').value = "";
+
+                li.querySelector('.complete-task-btn').addEventListener('click', function() {
+                    li.querySelector('span').classList.add('completed-task');
+                    this.disabled = true;
+                    updateEmployeeProgress(employee);
+                    showNotification(`To-do item completed for ${employee}`);
+                });
+
+                showNotification(`New to-do item added for ${employee}`);
+            }
+        });
+
+        function updateEmployeeProgress(employeeName) {
+            const employee = employees.find(emp => emp.name.split(' ')[0] === employeeName);
+            if (employee) {
+                employee.completedTasks++;
+                employee.pendingTasks--;
+                employee.progress = Math.round((employee.completedTasks / employee.totalTasks) * 100);
+
+                // Update employee table
+                const employeeRow = document.querySelector(`tr:contains('${employee.name}')`);
+                if (employeeRow) {
+                    const progressBar = employeeRow.querySelector('.progress');
+                    progressBar.style.width = `${employee.progress}%`;
+                    progressBar.textContent = `${employee.progress}%`;
+                }
+
+                // Update employee info
+                updateEmployeeInfo(employee);
+            }
+        }
+
+        function updateEmployeeInfo(employee) {
+            const employeeInfo = document.querySelector(`.empnames:contains('${employee.name}')`);
+            if (employeeInfo) {
+                employeeInfo.innerHTML = `
+                    <p>Name: ${employee.name}</p>
+                    <p>Team: ${employee.team} Team</p>
+                    <p>Position: ${employee.position}</p>
+                    <p>Total Tasks: ${employee.totalTasks}</p>
+                    <p>Completed Tasks: ${employee.completedTasks}</p>
+                    <p>Pending Tasks: ${employee.pendingTasks}</p>
+                    <p>Deadline: ${employee.deadline}</p>
+                    <p>Progress: ${employee.progress}%</p>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: ${employee.progress}%;">${employee.progress}%</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Close modal when clicking on <span> (x)
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('task-modal').style.display = "none";
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('task-modal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Search functionality for admin dashboard
+        document.getElementById('admin-search').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const searchResults = [];
+
+            // Search through tasks
+            tasks.forEach(task => {
+                if (task.name.toLowerCase().includes(searchTerm) || 
+                    task.assignedTo.toLowerCase().includes(searchTerm) ||
+                    task.status.toLowerCase().includes(searchTerm) ||
+                    task.priority.toLowerCase().includes(searchTerm)) {
+                    searchResults.push(`Task: ${task.name} (Assigned to: ${task.assignedTo})`);
+                }
+            });
+
+            // Search through employees
+            employees.forEach(emp => {
+                if (emp.name.toLowerCase().includes(searchTerm) || 
+                    emp.team.toLowerCase().includes(searchTerm) ||
+                    emp.position.toLowerCase().includes(searchTerm)) {
+                    searchResults.push(`Employee: ${emp.name} (${emp.team} Team, ${emp.position})`);
+                }
+            });
+
+            // Display search results
+            const searchCard = document.getElementById('search-card');
+            const searchResultsElement = document.getElementById('search-results');
+            
+            if (searchResults.length > 0) {
+                searchResultsElement.innerHTML = searchResults.map(result => `<p>${result}</p>`).join('');
+                searchCard.style.display = 'block';
+            } else {
+                searchCard.style.display = 'none';
+            }
+        });
+
+        // Close search card
+        document.getElementById('close-search').addEventListener('click', function() {
+            document.getElementById('search-card').style.display = 'none';
+        });
+
+        // Search functionality for employee dashboard
+        document.getElementById('employee-search').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const todoList = document.getElementById('todo-list');
+            const todos = todoList.getElementsByTagName('li');
+
+            for (let i = 0; i < todos.length; i++) {
+                const todoText = todos[i].textContent.toLowerCase();
+                if (todoText.includes(searchTerm)) {
+                    todos[i].style.display = "";
+                } else {
+                    todos[i].style.display = "none";
+                }
+            }
+        });
+
+        // // Helper function to find table rows containing specific text
+        // jQuery.expr[':'].contains = function(a, i, m) {
+        //     return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+        // };
+    </script>
+</body>
+</html>
